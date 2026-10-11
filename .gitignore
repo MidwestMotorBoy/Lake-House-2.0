@@ -1,0 +1,7 @@
+.DS_Store
+work/
+out/
+__pycache__/
+bambu template.3mf
+Lake Beulah dollhouse 1-75 - all print files.zip
+*.gcode.3mf

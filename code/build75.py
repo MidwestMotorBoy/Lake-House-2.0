@@ -376,19 +376,30 @@ for k, zt in enumerate((107.75, 108.25, 109.0, 109.75, 110.25, 111.0, 111.75, 11
     B.clear(r, zt, P_F1 + KEY)
     v = B.sl(100.0, zt); sub = v[:, r]; v[:, r] = np.where(sub == 0, 3, sub); B.sl(zt - 0.25, zt)[:, r] = 3
 B.fill(rect(73.5, S2Y0, 74.2, S2Y1), 106.5, 107.0, 3)
-B.clear(rect(36.5, 47.3, 41.3, 50.0) & ~FALL, 96.0, 98.0)                   # lake stair: fire terrace down to the lake deck
-for i, zt in enumerate((97.75, 97.0, 96.5)):
-    _put(B, rect(31.0, 47.3 + i * 1.0, 36.5, 48.3 + i * 1.0), 96.0, zt, 2)
+# ---- terrace stairs, per F1.1 / A1.1
+def _step(r, zt, L=2):                       # solid step: clear above the tread, fill below it
+    r = r & ~FALL; B.clear(r, zt, 104.0); v = B.sl(ZBASE + 0.25, zt); sub = v[:, r]; v[:, r] = np.where(sub == 0, L, sub); B.sl(zt - 0.25, zt)[:, r] = L
+# lake stair: 7 risers from the first-floor level (100) at the east end, heading WEST down to the lake deck (96)
+_step(rect(35.7, 46.4, 41.3, 49.6), 100.0)
+for k, zt in enumerate((99.5, 98.75, 98.25, 97.75, 97.25, 96.5)):
+    _step(rect(34.7 - k * 1.0, 46.4, 35.7 - k * 1.0, 49.6), zt)
+_step(rect(24.4, 46.4, 29.7, 47.3), 96.0, 3)                                 # deck runs up to the foot of the stair
+# fire terrace (98.5) down 4 risers heading south to the lake deck, at the south-west corner
+for k, zt in enumerate((98.0, 97.25, 96.75)):
+    _step(rect(20.0, 43.2 + k * 1.05, 24.4, 43.2 + (k + 1) * 1.05), zt)
+_step(rect(20.0, 46.35, 24.4, 47.3), 96.0, 3)
+# grill terrace (100) down 3 risers heading south to the fire terrace, at the north-west corner
+_step(rect(20.1, 24.3, 24.2, 25.25), 99.5); _step(rect(20.1, 25.25, 24.2, 26.2), 99.0)
 for i, zt in enumerate((113.5, 114.25, 114.75, 115.5, 116.0)):              # bar up to the showroom
     _put(Gp, rect(127.0 + i * 1.1, 57.0, 128.1 + i * 1.1, 60.9), 113.0, zt, 3)
 _put(Gp, rect(132.5, 57.0, 134.0, 60.9), 113.0, 116.0, 2)
 Gp.clear(rect(132.6, 58.4, 134.4, 60.6), 116.0, 123.0)
-# inlaid lettering on the fire terrace, reading correctly when viewed from the lake (west) looking at the house
+# inlaid lettering on the lake deck walkway, reading correctly when viewed from the lake (west) looking at the house
 from PIL import Image as _I, ImageDraw as _D, ImageFont as _F
-tx0, ty0, tx1, ty1 = 17.3, 25.6, 32.3, 46.0
+tx0, ty0, tx1, ty1 = 12.7, 63.8, 18.5, 88.0
 tw, th = yi(ty1) - yi(ty0), xi(tx1) - xi(tx0)          # line length runs north-south, lines stack east-west
 timg = _I.new('L', (tw, th), 0); td = _D.Draw(timg)
-lines = ['Lance\u2019s', 'Barbie', 'Dream House']
+lines = ['Lance\u2019s Barbie', 'Dream House']
 fpath = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 fs = 60
 while True:
@@ -401,7 +412,7 @@ for n, (l, b) in enumerate(zip(lines, boxes)):
     td.text(((tw - (b[2] - b[0])) // 2 - b[0], y0 + n * lh - b[1] + (lh - (b[3] - b[1])) // 2), l, font=fnt, fill=255)
 U = np.array(timg) > 128
 tmask = np.zeros((NY, NX), bool); tmask[yi(ty0):yi(ty0) + tw, xi(tx0):xi(tx0) + th] = U[::-1, :].T
-B.fill(tmask, 98.25, 98.5, 3)
+B.fill(tmask, 95.75, 96.0, 2)
 print('lettering font px', fs, 'cells', int(tmask.sum()), flush=True)
 # ---- furniture (layout from the architect's furniture plans F1.1 / F1.2; simple contemporary shapes)
 def fbox(P, x0, y0, x1, y1, zf, h, L=3, z0=0.0): _put(P, rect(x0, y0, x1, y1), zf + z0, zf + h, L)
@@ -435,6 +446,10 @@ for cx in (34.0, 38.4):
     dchair(B, a1(cx), 15.0, 100.0, 'N'); dchair(B, a1(cx), 20.8, 100.0, 'S')
 dchair(B, a1(31.0), 17.9, 100.0, 'W'); dchair(B, a1(41.5), 17.9, 100.0, 'E')
 B1(fbox, 34.0, 9.6, 38.0, 11.6, 100.0, 3.0)                                   # grill
+# fire terrace (F1.1): gas fire pit table, U-shaped sectional around it, three loungers on the lake side
+B1(fbox, 28.9, 31.5, 32.2, 37.8, 98.5, 1.5, 2); B1(fbox, 30.0, 32.7, 31.0, 36.7, 98.5, 1.75, 3, z0=1.5)
+B1(sofa, 29.0, 26.0, 35.0, 29.0, 98.5, ['N']); B1(sofa, 35.0, 26.0, 37.9, 43.2, 98.5, ['E']); B1(sofa, 29.0, 40.3, 35.0, 43.2, 98.5, ['S'])
+for ly in (29.7, 33.2, 36.7): B1(fbox, 24.8, ly, 26.3, ly + 2.9, 98.5, 1.0, 3)
 B1(sofa, 51.8, 24.3, 54.8, 27.5, 100.0, ['W']); B1(sofa, 58.8, 24.3, 61.8, 27.5, 100.0, ['E'])
 B1(fbox, 56.0, 25.2, 58.0, 27.2, 100.0, 1.25)
 B1(sofa, 55.0, 32.2, 66.6, 35.8, 100.0, ['N']); B1(sofa, 63.8, 35.8, 66.6, 43.5, 100.0, ['E'])

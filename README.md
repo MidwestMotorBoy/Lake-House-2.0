@@ -2,6 +2,19 @@
 
 A four-colour, take-apart "dollhouse" model of the Lake Beulah Residence, generated from the architect's plan set and sliced for a Bambu Lab H2C.
 
+## Renders
+
+![From the lake](renders/01%20Lake%20side.png)
+
+| | |
+|---|---|
+| ![Entry side](renders/02%20Entry%20side.png) | ![South-east](renders/03%20South-east.png) |
+| ![Roofs off](renders/05%20Roofs%20off.png) | ![Exploded](renders/07%20Exploded.png) |
+
+![All pieces](renders/09%20All%20pieces.png)
+
+More views are in `renders/`, with one picture per piece in `renders/pieces/`. They are made by `code/make_renders.py`.
+
 ## What's here
 
 | Folder / file | Contents |
@@ -11,7 +24,8 @@ A four-colour, take-apart "dollhouse" model of the Lake Beulah Residence, genera
 | `Assembled model - reference only.3mf` | Everything put together, for viewing only |
 | `STL parts (fallback).zip` | Per-colour STLs of every piece |
 | `code/` | The scripts that build the model |
-| `*.png` | Preview pictures |
+| `renders/` | Rendered views of the model and of each piece |
+| `*.png` | Working preview pictures |
 
 ## Pieces
 

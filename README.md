@@ -13,6 +13,12 @@ A four-colour, take-apart "dollhouse" model of the Lake Beulah Residence, genera
 
 ![All pieces](renders/09%20All%20pieces.png)
 
+### Interior concepts
+
+![Interior concepts](renders/interiors/0%20All%20interiors.png)
+
+Concept views inside the model with the suggested finishes: oak floors, warm white walls, walnut, pale stone, linen. They are rendered from the print model, so furniture is blocky and walls show the voxel steps. Made by `code/render_int.py` with the cameras in `code/interiors/final.json`.
+
 More views are in `renders/`, with one picture per piece in `renders/pieces/`. They are made by `code/make_renders.py`.
 
 ## What's here
